@@ -1,0 +1,117 @@
+{% load static %}
+
+<div
+      class="tab-pane fade"
+      id="room-pills-3"
+      role="tabpanel"
+      aria-labelledby="room-tab-3"
+    >
+      <div
+        class="card overflow-auto shadow-2-strong"
+        style="max-height: 500px"
+        id="chat1"
+      >
+        <div 
+          class="card-body d-flex flex-column"
+          style="height: 100%; overflow: auto"
+        >
+          <!-- Chat content here -->
+
+          <div id="messages">
+            {% for message in messages_chat %}
+          <div class="d-flex flex-row {% if message.member == request.user %}justify-content-start {% else %} justify-content-end  {% endif %} mb-4">
+            <img
+            {% if message.member.image %}
+              src="{{message.member.image.url}}"
+              {% else %}
+              src="{% static 'imgs/profile.png' %}"
+              {% endif %}
+              alt="avatar 1"
+              style="width: 45px; height: 100%;border-radius: 50px;"
+            />
+            <div
+              class="p-3 me-3 border"
+              style="border-radius: 15px; {% if message.member == request.user %}background-color: rgba(57, 192, 237, 0.2);  {% else %}  background-color: #fbfbfb"; {% endif %}  
+            >
+              <p class="small mb-0">{{message.title}}</p>
+            </div>
+           
+          </div>
+          {% endfor %}
+          </div>
+
+          <div class="row mt-auto" style="position: sticky; bottom: 0">
+            <div class="col-9">
+              <div class="form-outline "style="background-color: rgb(189 242 116); border-radius:20px;">
+                <textarea class="form-control" id="message" rows="4" ></textarea>
+                <label class="form-label" for="message" >Type your message</label >
+              </div>
+            </div>
+            <div class="col-3 d-flex align-items-end">
+              <div class="form-outline">
+                <a onclick="sendmymessage()" type="button" class="btn btn-info btn-rounded" > Send </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  <script>
+
+
+    let url = `ws://${window.location.host}/ws/socket-server/`
+      const chatSocket = new WebSocket(url)
+
+    chatSocket.onmessage = function(e){
+      let data = JSON.parse(e.data)
+      if(data.type === 'chat'){
+          let messages = document.getElementById('messages')
+        let messager = data.user
+        let user = '{{request.user.username}}'
+        let just = 'justify-content-end'
+        let mycolor = '#fbfbfb'
+
+        if(messager == user){
+          just = 'justify-content-start';
+          mycolor = 'rgb(57 192 237 / 20%)';
+        }
+          messages.insertAdjacentHTML('beforeend', `<div>
+                                  
+                                  <div class="d-flex flex-row ${just} mb-4">
+                                    <div
+                                      class="p-3 me-3 border"
+                                      style="border-radius: 15px; background-color: ${mycolor}" 
+                                    >
+                                      <p class="small mb-0">${data.message}</p>
+                                      
+                                    </div>
+                                    <img
+                                      src="${data.image}"
+                                      alt="avatar 1"
+                                      style="width: 45px; height: 100%;border-radius: 50px"
+                                    /> 
+                                  </div>
+                              </div>`)
+      }
+    }
+
+
+    function sendmymessage(){
+      let message_elemnt = document.getElementById("message");
+      let message = message_elemnt.value;
+      
+
+      chatSocket.send(JSON.stringify({
+        'message':message,
+        'room':{{room.id}},
+        'user':{{request.user.id}},
+      }))
+      message_elemnt.value = ''
+
+      
+
+    }
+
+  </script>

@@ -1,0 +1,105 @@
+     {% load static %}
+     <!-- Navbar -->
+     <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+        <!-- Container wrapper -->
+        <div class="container-fluid">
+          <!-- Toggle button -->
+          <button
+            data-mdb-collapse-init
+            class="navbar-toggler"
+            type="button"
+            data-mdb-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i class="fas fa-bars"></i>
+          </button>
+  
+          <!-- Collapsible wrapper -->
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Navbar brand -->
+            <a class="navbar-brand mt-2 mt-lg-0" href="#">
+              <img
+                src="{% static 'imgs/blank_logo.png' %}"
+                height="40"
+                alt="Issa Logo"
+                loading="lazy"
+              />
+            </a>
+            <!-- Left links -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="#">Home</a>
+              </li>
+  
+              <li class="nav-item">
+                <a class="nav-link" href="#">Projects</a>
+              </li>
+            </ul>
+            <!-- Left links -->
+          </div>
+          <!-- Collapsible wrapper -->
+  
+          <!-- Right elements -->
+          <div class="d-flex align-items-center">
+            <!-- Avatar -->
+            {% if request.user.is_authenticated%}
+            <div class="dropdown">
+              <a
+                data-mdb-dropdown-init
+                class="dropdown-toggle d-flex align-items-center hidden-arrow"
+                href="#"
+                id="navbarDropdownMenuAvatar"
+                role="button"
+                aria-expanded="false"
+              >
+              {% if request.user.image %}
+                <img
+                  src="
+                    {{request.user.image.url}}
+
+                  "
+                  class="rounded-circle"
+                  height="25"
+                  alt="Black and White Portrait of a Man"
+                  loading="lazy"
+                />
+                {% else %}
+                <img
+                src="
+                  {% static 'imgs/profile.png' %}  
+                "
+                class="rounded-circle"
+                height="25"
+                alt="Black and White Portrait of a Man"
+                loading="lazy"
+              />
+              {% endif %}
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="navbarDropdownMenuAvatar"
+              >
+                <li>
+                  <a class="dropdown-item" href="{% url 'accounts:show_profile_page' %}">My profile</a>
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    data-mdb-ripple-init
+                    data-mdb-modal-init
+                    data-mdb-target="#logoutModal"
+                    >Logout</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          {% endif %}
+          <!-- Right elements -->
+        </div>
+        <!-- Container wrapper -->
+      </nav>
+      <!-- Navbar -->

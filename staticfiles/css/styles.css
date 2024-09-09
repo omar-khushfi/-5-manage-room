@@ -1,0 +1,12 @@
+.w-60 {
+    max-width: 60% !important;
+}
+.m-auto {
+    margin:auto;
+}
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    --mdb-nav-pills-link-active-bg: #4f90b6;
+    --mdb-nav-pills-link-active-color: #dc4c64;
+    background-color: var(--mdb-nav-pills-link-active-bg);
+    color: #fffffffc;
+}

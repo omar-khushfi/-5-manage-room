@@ -1,0 +1,8 @@
+<form id = "add-todo-form" class="d-flex justify-content-center align-items-center mb-4">
+  {% csrf_token %}
+  <div data-mdb-input-init class="form-outline flex-fill">
+      <input id="title" type="text" name='title' id="form2" class="form-control" />
+      <label class="form-label" for="form2">New task...</label>
+    </div>
+    <a id="submit-todo-form" class="btn btn-info ms-2" > Add </a>
+  </form>

@@ -1,0 +1,102 @@
+<div
+      class="tab-pane fade"
+      id="room-pills-2"
+      role="tabpanel"
+      aria-labelledby="room-tab-2"
+    >
+      <div
+        class="card row d-flex justify-content-center align-items-center shadow-2-strong m-2"
+      >
+        <div class="card">
+          <div class="card-body p-3">
+            {% include "room_partion/todo_partion/create/createtodo.html" %}
+
+            <!-- Tabs navs -->
+            <ul class="nav nav-tabs mb-4 pb-2" id="ex1" role="tablist">
+              <li class="nav-item" role="presentation">
+                <a
+                  class="nav-link active"
+                  id="ex1-tab-1"
+                  data-mdb-tab-init
+                  href="#ex1-tabs-1"
+                  role="tab"
+                  aria-controls="ex1-tabs-1"
+                  aria-selected="true"
+                  >All</a
+                >
+              </li>
+              <li class="nav-item" role="presentation">
+                <a
+                  class="nav-link"
+                  id="ex1-tab-2"
+                  data-mdb-tab-init
+                  href="#ex1-tabs-2"
+                  role="tab"
+                  aria-controls="ex1-tabs-2"
+                  aria-selected="false"
+                  >Active</a
+                >
+              </li>
+              <li class="nav-item" role="presentation">
+                <a
+                  class="nav-link"
+                  id="ex1-tab-3"
+                  data-mdb-tab-init
+                  href="#ex1-tabs-3"
+                  role="tab"
+                  aria-controls="ex1-tabs-3"
+                  aria-selected="false"
+                  >Completed</a
+                >
+              </li>
+            </ul>
+            <!-- Tabs navs -->
+
+            <!-- Tabs content -->
+            <div class="tab-content" id="ex1-content">
+              <div
+                class="tab-pane fade show active"
+                id="ex1-tabs-1"
+                role="tabpanel"
+                aria-labelledby="ex1-tab-1"
+              >
+                <ul id="todos" class="list-group mb-0">
+                  {% for todo in todos %}
+                    {% include "room_partion/todo/todo.html" %}
+                  {% endfor %}
+                </ul>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="ex1-tabs-2"
+                role="tabpanel"
+                aria-labelledby="ex1-tab-2"
+              >
+                <ul id="activetodos" class="list-group mb-0">
+                  {% for todo in todos %}
+                    {% if todo.is_done == False %}
+                    {% include "room_partion/todo/todo.html" %}
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="ex1-tabs-3"
+                role="tabpanel"
+                aria-labelledby="ex1-tab-3"
+              >
+                <ul class="list-group mb-0">
+                  {% for todo in todos %}
+                    {% if todo.is_done == True %}
+                    {% include "room_partion/todo/todo.html" %}
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+            <!-- Tabs content -->
+          </div>
+        </div>
+      </div>
+    </div>

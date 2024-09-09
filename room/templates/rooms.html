@@ -1,0 +1,162 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container">
+  <!-- search -->
+  <div class="row my-3">
+    <form method="post" action="{% url 'room:show_rooms_page'%}" >
+      {% csrf_token %}
+    <div class="input-group">
+      <div class="form-outline" data-mdb-input-init>
+        <input type="search" id="form1" class="form-control" name="search" />
+        <label class="form-label" for="form1">Search</label>
+      </div>
+      <button type="submit" class="btn btn-primary" >
+        search
+      </button>
+    </div>
+  </form>
+  </div>
+  <!-- cards -->
+  <div class="row">
+    
+    {% for room in rooms %}
+      
+   
+      
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="card text-center">
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+        >
+          <!-- Notification icon with badge -->
+          <div>
+            {% if room.is_done == False %}
+            <span class="badge bg-primary"><i class="fas fa-bell"></i>3</span>
+            {% endif %}
+            {% if room.is_done == true%}
+            <span class="badge bg-danger mx-1"
+              ><i class="fa-solid fa-circle-check mx-1"></i>Done</span
+            >
+            {% if request.user == room.admin %}
+            <a class="badge bg-primary"
+            ><i  href="{% url 'room:change_room_status' room.id %}" class="fa-solid fa-arrows-rotate"></i></a
+          >
+          {% endif %}
+            {% else %}
+            {% if request.user == room.admin %}
+            <a href="{% url 'room:change_room_status' room.id %}" style="color: rgb(57, 160, 194)"
+            >Done ?
+           
+          </a>
+          {% endif %}
+            {% endif %}
+            
+          </div>
+          <!-- More options icon with modal trigger -->
+          {% if room.is_done == False %}
+          <a
+            href="#"
+            data-mdb-ripple-init
+            data-mdb-modal-init
+            data-mdb-target="#logoutRoomModal{{room.id}}"
+            ><i class="fas fa-ellipsis-v"></i
+          ></a>
+          {% endif %}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{room.title}}</h5>
+          <p class="card-text">
+           {{room.description}}
+          </p>
+          <!-- Inline form -->
+          {% if request.user in room.members.all %}
+         
+          <a 
+          {% if room.is_done %}
+          href=""
+          {% else %}
+          href="{% url 'room:show_room_page' room.id %}"
+          {% endif %}
+           class="btn btn-primary ms-2">enter the room</a>
+        
+          
+          {% else %}
+          <form method="post" action="{% url 'room:check_room_id' room.id %}" class="d-flex">
+            {% csrf_token %}
+          
+            <input type="text" class="form-control" placeholder="Your input" name="roomid" />
+            <button type="submit" class="btn btn-primary ms-2">Submit</button>
+          </form>
+          {% endif %}
+         
+        </div>
+        <div class="card-footer text-muted">Created at : {{room.created_at|date:"d-n-Y"}}</div>
+      </div>
+    </div>
+   
+    <!-- Repeat the above 'col' div for each card -->
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="logoutRoomModal{{room.id}}"
+  tabindex="-1"
+  aria-labelledby="logoutRoomModalLabel{{room.id}}"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="logoutRoomModalLabel{{room.id}}">Logout the Room</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- Inline form -->
+        <form class="d-flex" method="post" action="{% url 'room:logout_room' room.id  %}">
+          {% csrf_token %}
+          <input type="text" class="form-control" placeholder="Your room id " name="roomid "/>
+          <button type="submit" class="btn btn-primary ms-2">Logout</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+</div>
+
+
+
+
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        {% if rooms.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ rooms.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        {% endif %}
+        {% for num in rooms.paginator.page_range %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+            </li>
+        {% endfor %}
+        {% if rooms.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ rooms.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+</div>
+
+
+{% endblock content %}
