@@ -1,0 +1,1 @@
+This site allows you to create accounts and log in. It manages rooms, where each room has tasks that can be added or its status modified without updating the page. Each room has a real-time conversation.
